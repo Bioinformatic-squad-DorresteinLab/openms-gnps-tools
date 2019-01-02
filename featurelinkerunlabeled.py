@@ -3,8 +3,6 @@ import shutil
 import sys
 import xmltodict as xtd
 
-import ming_parallel_library as parallel
-
 def parse_folder(dir):
     for file in sorted(os.listdir(dir)):
         if "log" not in file and 'featureXML' in file:
@@ -29,7 +27,6 @@ def featurelinkerunlabeledkd(input_port, ini_file, out_port):
     command += "-in "
     for input_file,file_count in list(parse_folder(input_port)):
         command += input_file + " "
-
     command += "-out " + out_port+"/"+out_port+"-0000.consensusXML" + ' >> ' + out_port+'/logfile.txt'
     # command += " -out " + curr_port+"/tmp.consensusXML"
 
@@ -76,7 +73,7 @@ def fix_filenames(out_port, mapping_file):
     for input_file,file_count in list(parse_out_folder(out_port)):
         with open(input_file) as f:
             file_dict = xtd.parse(f.read())
-
+    
         for map in file_dict['consensusXML']['mapList']['map']:
             print("\tid:", map['@id'], '\t', map['@name'], '\t-->\t', files[int(map['@id'])])
             map['@name'] = files[int(map['@id'])]
