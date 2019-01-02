@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 from subprocess import Popen
+import ming_parallel_library as mpl
 
 
 def parse_folder(dir):
