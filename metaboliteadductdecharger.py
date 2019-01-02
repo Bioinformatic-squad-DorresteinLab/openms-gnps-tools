@@ -33,9 +33,11 @@ def metaboliteadductdecharger(input_port, ini_file, out_port):
         cmd = get_exec_cmd(input_file,file_count,ini_file,out_port)
         commands.append(cmd)
 
-    processes = [Popen(cmd, shell=True) for cmd in commands]
+    mpl.run_parallel_shellcommands(commands,8)
 
-    for p in processes: p.wait()
+    # processes = [Popen(cmd, shell=True) for cmd in commands]
+    #
+    # for p in processes: p.wait()
 
 if __name__ == '__main__':
     print("===METABOLITE ADDUCT DECHARGER===")

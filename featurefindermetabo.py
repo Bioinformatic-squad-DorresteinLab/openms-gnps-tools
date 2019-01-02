@@ -3,7 +3,7 @@ import shutil
 import sys
 import multiprocessing as mp
 from subprocess import Popen
-
+import ming_parallel_library as mpl
 
 def parse_folder(dir):
     if not os.path.exists(dir):
@@ -39,20 +39,22 @@ def featurefindermetabo(input_port, ini_file, out_port):
         cmd = get_exec_cmd(input_file,file_count,ini_file,out_port)
         commands.append(cmd)
 
-    processes = [Popen(cmd, shell=True) for cmd in commands]
+    mpl.run_parallel_shellcommands(commands,8)
 
-    for p in processes: p.wait()
+    # processes = [Popen(cmd, shell=True) for cmd in commands]
+    #
+    # for p in processes: p.wait()
 
 
 if __name__ == '__main__':
     print("===FEATURE FINDER METABO===")
 
-    print(sys.argv)
-
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
     # os.environ["LD_LIBRARY_PATH"] = "/data/beta-proteomics2/tools/openms_2.4/openms-env/conda/lib"
     os.environ["PATH"] = sys.argv[2]
+    print(sys.path)
+
     # os.environ["PATH"] = "/data/beta-proteomics2/tools/openms_2.4/openms-env/openms-build/bin:/data/beta-proteomics2/tools/openms_2.4/openms-env/conda/bin:$PATH"
 
     openms_data_path = sys.argv[3]
