@@ -17,7 +17,8 @@ def get_exec_cmd(input_file, file_count, ini_file, out_port):
     if ini_file is not None:
         command += "-ini " + ini_file + " "
     command += "-in " + input_file + " "
-    command += "-out_fm " + out_port+'/'+out_port+'-'+file_count+'.featureXML' + " -out_cm " + out_port+'/'+out_port+'-'+file_count+'.consensusXML' + ' >> ' + out_port+'/logfile.txt'
+    command += "-out_fm " + out_port+'/'+out_port+'-'+file_count+'.featureXML' + \
+      " -out_cm " + out_port+'/'+out_port+'-'+file_count+'.consensusXML' + ' > ' + out_port+'/logfile-'+file_count+'.txt'
 
     print("COMMAND: " + command + "\n")
     return command

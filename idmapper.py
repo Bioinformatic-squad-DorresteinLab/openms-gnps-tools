@@ -21,7 +21,7 @@ def get_exec_cmd(input_file, file_count, ini_file, idxml_path, input_port, out_p
     command += '-spectra:in ' + input_port+'/'+input_port+'-'+file_count+".mzML"
 
     output = out_port+'/'+out_port+'-'+file_count+'.featureXML'
-    command += ' -out ' + output + ' >> ' + out_port+'/logfile.txt'
+    command += ' -out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
 
     print("COMMAND: " + command + '\n')
     return command
