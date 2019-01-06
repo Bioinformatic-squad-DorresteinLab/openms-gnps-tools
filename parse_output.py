@@ -3,7 +3,7 @@ import sys
 import shutil
 import xmltodict as xtd
 
-OUTPUT_DIR_INDEX = 9
+OUTPUT_DIR_INDEX = 10
 
 if __name__ == '__main__':
     print("===PARSE OUTPUT===")
