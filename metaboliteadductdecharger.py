@@ -27,8 +27,9 @@ def get_exec_cmd(input_file, file_count, ini_file, out_port):
 #4 module: metabolite adduct decharger
 '''
 def metaboliteadductdecharger(input_port, ini_file, out_port):
-    assert len(list(parse_folder(input_port))) > 0,\
-      "ERROR: issue with idmapper step"
+    with open(input_port+'/logfile.txt') as input_log:
+        assert len(list(parse_folder(featurefinder_port))) > 0, \
+          "ERROR: issue with idmapper step\n" + input_log.read()
 
     commands = []
     for input_file,file_count in list(parse_folder(input_port)):
