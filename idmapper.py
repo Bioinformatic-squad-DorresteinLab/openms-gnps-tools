@@ -41,9 +41,6 @@ def idmapper(input_port, ini_file, idxml_path, featurefinder_port, out_port):
         commands.append(cmd)
 
     mpl.run_parallel_shellcommands(commands,8)
-    # processes = [Popen(cmd, shell=True) for cmd in commands]
-    #
-    # for p in processes: p.wait()
 
 
 if __name__ == '__main__':
