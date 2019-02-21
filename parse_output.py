@@ -31,10 +31,10 @@ if __name__ == '__main__':
     output_dir = sys.argv[OUTPUT_DIR_INDEX]
     for input_dir in sys.argv[1:OUTPUT_DIR_INDEX]:
         print("move -- " + input_dir + " -> " + output_dir+"/"+input_dir)
-        shutil.copytree(input_dir, output_dir+"/"+input_dir)
+        shutil.copyfile(input_dir, output_dir+"/"+input_dir)
 
     # copy log files to log folder
-    os.mkdir('logs')    
+    os.mkdir('logs')
     for input_dir in sys.argv[1:OUTPUT_DIR_INDEX]:
         for filepath in os.listdir(input_dir):
             input_file = input_dir+'/'+filepath
