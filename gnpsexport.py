@@ -2,6 +2,8 @@ import os
 import shutil
 import sys
 import xmltodict as xtd
+import openms_workflow as wrkflw
+
 
 def parse_folder(dir):
     if not os.path.exists(dir):
@@ -50,6 +52,10 @@ if __name__ == '__main__':
     os.environ["PATH"] = sys.argv[2]
     os.environ["OPENMS_DATA_PATH"] = os.path.abspath(sys.argv[3])
 
+    in_port = sys.argv[4]
+    inputFiles_port = sys.argv[5]
+    out_port = sys.argv[7]
+
 
     # ini file
     ini_file = None
@@ -59,4 +65,6 @@ if __name__ == '__main__':
             ini_file = ini_dir[0][0]
     # shutil.copyfile(ini_file, sys.argv[3])
 
-    gnpsexport(sys.argv[4], sys.argv[5], ini_file, sys.argv[7])
+    gnpsexport(in_port, inputFiles_port, ini_file, out_port)
+
+    wrkflw.postvalidation(modulename="gnps-export", outpath=out_port)

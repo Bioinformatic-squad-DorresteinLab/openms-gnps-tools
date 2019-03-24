@@ -3,13 +3,7 @@ import shutil
 import sys
 from subprocess import Popen
 import ming_parallel_library as mpl
-
-def parse_folder(dir):
-    if not os.path.exists(dir):
-        yield None
-    for file in sorted(os.listdir(dir)):
-        if "log" not in file:
-            yield (dir+"/"+file, os.path.splitext(file)[0].split('-')[1])
+import openms_workflow as wrkflw
 
 
 def get_exec_cmd(input_file, file_count, ini_file, out_port):
@@ -27,12 +21,8 @@ def get_exec_cmd(input_file, file_count, ini_file, out_port):
 #4 module: metabolite adduct decharger
 '''
 def metaboliteadductdecharger(input_port, ini_file, out_port):
-    with open(input_port+'/logfile.txt') as input_log:
-        assert len(list(parse_folder(input_port))) > 0, \
-          "ERROR: issue with idmapper step\n" + input_log.read()
-
     commands = []
-    for input_file,file_count in list(parse_folder(input_port)):
+    for input_file,file_count in wrkflw.parsefolder(input_port):
         cmd = get_exec_cmd(input_file,file_count,ini_file,out_port)
         commands.append(cmd)
 
@@ -45,6 +35,12 @@ def metaboliteadductdecharger(input_port, ini_file, out_port):
 if __name__ == '__main__':
     print("===METABOLITE ADDUCT DECHARGER===")
 
+    in_port = sys.argv[4]
+    out_port = sys.argv[6]
+
+    # validate previous module's output
+    # wrkflw.prevalidation("map-aligner-pose-clustering", in_port, logtype="single")
+
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
     os.environ["PATH"] = sys.argv[2]+":"+os.environ["PATH"]
@@ -53,9 +49,10 @@ if __name__ == '__main__':
     # ini file
     ini_file = None
     if os.path.exists('iniFiles'):
-        ini_dir = list(parse_folder('iniFiles'))
+        ini_dir = list(wrkflw.parsefolder('iniFiles'))
         if len(ini_dir) > 0:
             ini_file = ini_dir[0][0]
 
-    metaboliteadductdecharger(sys.argv[4], ini_file, sys.argv[6])
-    # metaboliteadductdecharger(os.path.exists(sys.argv[1]+"/featurelinker.featureXML"), sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    metaboliteadductdecharger(in_port, ini_file, out_port)
+
+    wrkflw.postvalidation(modulename="metabolite-adduct-decharger", outpath=out_port,)

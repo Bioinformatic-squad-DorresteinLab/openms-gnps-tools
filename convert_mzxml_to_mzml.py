@@ -4,14 +4,7 @@ import sys
 import multiprocessing as mp
 from subprocess import Popen
 import ming_parallel_library as mpl
-
-def parse_folder(dir):
-    if not os.path.exists(dir):
-        raise StopIteration
-    for file in sorted(os.listdir(dir)):
-        if "log" not in file and file[0] is not '.':
-            yield (dir+"/"+file, os.path.splitext(file)[0].split('-')[1])
-
+import openms_workflow as wrkflw
 
 def get_exec_cmd(input_file, file_count, out_port):
     output = out_port+'/'+out_port+'-'+file_count+'.mzML'
@@ -28,7 +21,7 @@ def get_exec_cmd(input_file, file_count, out_port):
 '''
 def fileconverter(input_port, out_port):
     commands = []
-    for input_file,file_count in list(parse_folder(input_port)):
+    for input_file,file_count in list(wrkflw.parsefolder(input_port)):
         if '.mzml' not in input_file.lower():
             cmd = get_exec_cmd(input_file,file_count,out_port)
             commands.append(cmd)
@@ -39,7 +32,7 @@ def fileconverter(input_port, out_port):
 
 
 if __name__ == '__main__':
-    print("===FEATURE FINDER METABO===")
+    print("===CONVERT MZXML TO MZML===")
 
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
@@ -49,8 +42,11 @@ if __name__ == '__main__':
     # ini file
     ini_file = None
     if os.path.exists('iniFiles'):
-        ini_dir = list(parse_folder('iniFiles'))
+        ini_dir = list(wrkflw.parsefolder('iniFiles'))
         if len(ini_dir) > 0:
             ini_file = ini_dir[0][0]
 
-    fileconverter(sys.argv[4], sys.argv[5])
+    in_port = sys.argv[4]
+    out_port = sys.argv[5]
+
+    fileconverter(in_port, out_port)

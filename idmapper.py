@@ -3,7 +3,7 @@ import shutil
 import sys
 from subprocess import Popen
 import ming_parallel_library as mpl
-
+import openms_workflow as wrkflw
 
 def parse_folder(dir):
     if not os.path.exists(dir):
@@ -18,10 +18,10 @@ def get_exec_cmd(input_file, file_count, ini_file, idxml_path, input_port, out_p
     if ini_file is not None:
         command += '-ini ' + ini_file + ' '
     command += '-in ' + input_file + ' -id ' + idxml_path + ' '
-    command += '-spectra:in ' + input_port+'/'+input_port+'-'+file_count+".mzML"
+    command += '-spectra:in ' + input_port+'/'+input_port+'-'+file_count+".mzML "
 
     output = out_port+'/'+out_port+'-'+file_count+'.featureXML'
-    command += ' -out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
+    command += '-out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
 
     print("COMMAND: " + command + '\n')
     return command
@@ -31,11 +31,8 @@ def get_exec_cmd(input_file, file_count, ini_file, idxml_path, input_port, out_p
 #2 module: id mapper
 '''
 def idmapper(input_port, ini_file, idxml_path, featurefinder_port, out_port):
-    assert len(list(parse_folder(featurefinder_port))) > 0, \
-      "ERROR: issue with featurefindermetabo step"
-
     commands = []
-    for input_file,file_count in list(parse_folder(featurefinder_port)):
+    for input_file,file_count in wrkflw.parsefolder(featurefinder_port):
         cmd = get_exec_cmd(input_file,file_count,ini_file,idxml_path,\
           input_port,out_port)
         commands.append(cmd)
@@ -46,6 +43,13 @@ def idmapper(input_port, ini_file, idxml_path, featurefinder_port, out_port):
 if __name__ == '__main__':
     print("===ID Mapper===")
 
+    mzml_port = sys.argv[4]
+    featurefinder_port = sys.argv[7]
+    out_port = sys.argv[8]
+
+    # validate previous module output
+    # wrkflw.prevalidation("feature-finder-metabo", featurefinder_port)
+
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
     os.environ["PATH"] = sys.argv[2]
@@ -54,9 +58,10 @@ if __name__ == '__main__':
     # ini file
     ini_file = None
     if os.path.exists('iniFiles'):
-        ini_dir = list(parse_folder('iniFiles'))
+        ini_dir = list(wrkflw.parsefolder('iniFiles'))
         if len(ini_dir) > 0:
             ini_file = ini_dir[0][0]
 
-    idmapper(sys.argv[4], ini_file, sys.argv[6], sys.argv[7], sys.argv[8])
-    # idmapper(sys.argv[1], ini_file, sys.argv[3], sys.argv[4], sys.argv[5])
+    idmapper(mzml_port, ini_file, sys.argv[6], featurefinder_port, out_port)
+
+    wrkflw.postvalidation(modulename="id-mapper", out_port)

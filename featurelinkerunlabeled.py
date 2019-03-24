@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 import xmltodict as xtd
+import openms_workflow as wrkflw
 
 def parse_folder(dir):
     for file in sorted(os.listdir(dir)):
@@ -11,7 +12,7 @@ def parse_folder(dir):
 
 def parse_out_folder(dir):
     for file in os.listdir(dir):
-        if "log" not in file in file:
+        if "log" not in file:
             yield (dir+"/"+file, os.path.splitext(file)[0].split('-')[1])
 
 
@@ -19,13 +20,11 @@ def parse_out_folder(dir):
 #5 module: feature linker unlabeled kd
 '''
 def featurelinkerunlabeledkd(input_port, ini_file, out_port):
-    assert len(list(parse_folder(input_port))) > 0
-
     command = "FeatureLinkerUnlabeledKD "
     if ini_file is not None:
         command += "-ini " + ini_file + " "
     command += "-in "
-    for input_file,file_count in list(parse_folder(input_port)):
+    for input_file,file_count in wrkflw.parsefolder(input_port,whitelist=["featureXML"]):
         command += input_file + " "
     command += "-out " + out_port+"/"+out_port+"-0000.consensusXML" + ' > ' + out_port+'/logfile.txt'
     # command += " -out " + curr_port+"/tmp.consensusXML"
@@ -46,7 +45,7 @@ def featurelinkerunlabeledqt(input_port, ini_file, out_port):
     if ini_file is not None:
         command += "-ini " + ini_file + " "
     command += "-in "
-    for input_file,file_count in list(parse_folder(input_port)):
+    for input_file,file_count in wrkflw.parsefolder(input_port, whitelist=["featureXML"]):
             command += input_file + " "
     command += "-out " + out_port+"/"+out_port+"-0000.consensusXML" + ' >> ' + out_port+'/logfile.txt'
     # command += " -out " + curr_port+"/tmp.consensusXML"
@@ -69,8 +68,8 @@ def fix_filenames(out_port, mapping_file):
                 print("mapping",raw_file_path,"->",map[1])
                 files[int(raw_file_path)] = map[1]
 
-    print(list(parse_out_folder(out_port)))
-    for input_file,file_count in list(parse_out_folder(out_port)):
+    print(list(wrkflw.parsefolder(out_port)))
+    for input_file,file_count in wrkflw.parsefolder(out_port):
         with open(input_file) as f:
             file_dict = xtd.parse(f.read())
 
@@ -89,6 +88,12 @@ def fix_filenames(out_port, mapping_file):
 if __name__ == '__main__':
     print("\n==FEATURE LINKER UNLABELED QT==")
 
+    in_port = sys.argv[4]
+    out_port = sys.argv[6]
+
+    # validate previous module's output
+    # wrkflw.prevalidation("metabolite-adduct-decharger",in_port,output_per_job=2)
+
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
     os.environ["PATH"] = sys.argv[2]
@@ -97,7 +102,7 @@ if __name__ == '__main__':
     # ini file
     ini_file = None
     if os.path.exists('iniFiles'):
-        ini_dir = list(parse_folder('iniFiles'))
+        ini_dir = list(wrkflw.parsefolder('iniFiles'))
         if len(ini_dir) > 0:
             ini_file = ini_dir[0][0]
 
@@ -110,8 +115,10 @@ if __name__ == '__main__':
                 linker_tool = param['#text']
 
     if linker_tool == "Feature Linker Unlabeled QT":
-        featurelinkerunlabeledqt(sys.argv[4], ini_file, sys.argv[6])
+        featurelinkerunlabeledqt(in_port, ini_file, out_port)
     else:
-        featurelinkerunlabeledkd(sys.argv[4], ini_file, sys.argv[6])
+        featurelinkerunlabeledkd(in_port, ini_file, out_port)
 
-    fix_filenames(sys.argv[6], sys.argv[7])
+    fix_filenames(out_port, sys.argv[7])
+
+# feature-linker-unlabeled

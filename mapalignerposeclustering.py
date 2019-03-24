@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+import openms_workflow as wrkflw
 
 def parse_folder(dir):
     if not os.path.exists(dir):
@@ -14,16 +15,15 @@ def parse_folder(dir):
 #3 module: map aligner pose clustering
 '''
 def mapalignerposeclustering(input_port, ini_file, out_port):
-    assert len(list(parse_folder(input_port))) > 0
     command = "MapAlignerPoseClustering "
     if ini_file is not None:
         command += "-ini " + ini_file + " "
     command += "-in "
-    for input_file,file_count in list(parse_folder(input_port)):
+    for input_file,file_count in wrkflw.parsefolder(input_port):
         command += input_file + ' '
 
     command += '-out '
-    for input_file,file_count in list(parse_folder(input_port)):
+    for input_file,file_count in wrkflw.parsefolder(input_port):
         command += out_port+"/"+out_port+"-"+file_count+".featureXML" + ' '
     command += ' > ' + out_port+'/logfile.txt'
 
@@ -34,6 +34,12 @@ def mapalignerposeclustering(input_port, ini_file, out_port):
 if __name__ == '__main__':
     print("===MAP ALIGNER POSE CLUSTERING===")
 
+    in_port = sys.argv[4]
+    out_port = sys.argv[6]
+
+    # validate previous module's output
+    # wrkflw.prevalidation("id-mapper", in_port)
+
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
     os.environ["PATH"] = sys.argv[2]
@@ -42,9 +48,11 @@ if __name__ == '__main__':
     # ini file
     ini_file = None
     if os.path.exists('iniFiles'):
-        ini_dir = list(parse_folder('iniFiles'))
+        ini_dir = list(wrkflw.parsefolder('iniFiles'))
         if len(ini_dir) > 0:
             ini_file = ini_dir[0][0]
 
-    mapalignerposeclustering(sys.argv[4], ini_file, sys.argv[6])
-    # mapalignerposeclustering(sys.argv[1], sys.argv[2], sys.argv[3])
+
+    mapalignerposeclustering(in_port, ini_file, out_port)
+
+    wrkflw.postvalidation(modulename="map-aligner-pose-clustering", outpath=out_port)

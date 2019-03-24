@@ -2,20 +2,15 @@ import os
 import shutil
 import sys
 import xmltodict as xtd
+import openms_workflow as wrkflw
 
-def parse_folder(dir):
-    if not os.path.exists(dir):
-        yield None
-    for file in os.listdir(dir):
-        if "log" not in file:
-            yield (dir+"/"+file, os.path.splitext(file)[0].split('-')[1])
 
 '''
 #6 module: gnps export
 '''
 def filefilter(input_port, out_port):
-    assert len(list(parse_folder(input_port))) > 0
-    for input_file,file_count in list(parse_folder(input_port)):
+    #only one job
+    for input_file,file_count in wrkflw.parsefolder(input_port):
         # in_cm = in_port+'/'+get_port_outputs(in_port)[0]
         output = out_port+'/'+out_port+"-"+file_count+".consensusXML"
 
@@ -30,10 +25,17 @@ def filefilter(input_port, out_port):
 if __name__ == '__main__':
     print("===FILE FILTER===")
 
+    in_port = sys.argv[4]
+    out_port = sys.argv[5]
+
+    # validate previous module's output
+    # wrkflw.prevalidation("feature-linker-unlabeled", in_port, logtype="single", output_per_job=0)
+
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
     os.environ["PATH"] = sys.argv[2]
     os.environ["OPENMS_DATA_PATH"] = os.path.abspath(sys.argv[3])
 
-
     filefilter(sys.argv[4], sys.argv[5])
+
+    wrkflw.postvalidation(modulename="file-filter", outpath=out_port, logtype="single")
