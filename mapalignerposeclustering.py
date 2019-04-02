@@ -3,14 +3,6 @@ import shutil
 import sys
 import openms_workflow as wrkflw
 
-def parse_folder(dir):
-    if not os.path.exists(dir):
-        yield None
-    for file in sorted(os.listdir(dir)):
-        if "log" not in file:
-            yield (dir+"/"+file, os.path.splitext(file)[0].split('-')[1])
-
-
 '''
 #3 module: map aligner pose clustering
 '''
@@ -21,11 +13,11 @@ def mapalignerposeclustering(input_port, ini_file, out_port):
     command += "-in "
     for input_file,file_count in wrkflw.parsefolder(input_port):
         command += input_file + ' '
-
     command += '-out '
     for input_file,file_count in wrkflw.parsefolder(input_port):
         command += out_port+"/"+out_port+"-"+file_count+".featureXML" + ' '
-    command += ' > ' + out_port+'/logfile.txt'
+    # command += ' > ' + out_port+'/logfile.txt'
+    command += '-log ' + out_port+'/logfile-00000.txt'
 
     print("COMMAND: " + command + "\n")
     os.system(command)
@@ -55,4 +47,4 @@ if __name__ == '__main__':
 
     mapalignerposeclustering(in_port, ini_file, out_port)
 
-    wrkflw.postvalidation(modulename="map-aligner-pose-clustering", outpath=out_port)
+    # wrkflw.postvalidation(modulename="map-aligner-pose-clustering", outpath=out_port)

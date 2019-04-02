@@ -11,8 +11,9 @@ def get_exec_cmd(input_file, file_count, ini_file, out_port):
     if ini_file is not None:
         command += "-ini " + ini_file + " "
     command += "-in " + input_file + " "
-    command += "-out_fm " + out_port+'/'+out_port+'-'+file_count+'.featureXML' + \
-      " -out_cm " + out_port+'/'+out_port+'-'+file_count+'.consensusXML' + ' > ' + out_port+'/logfile-'+file_count+'.txt'
+    command += "-out_fm " + out_port+'/'+out_port+'-'+file_count+'.featureXML '
+    command += "-out_cm " + out_port+'/'+out_port+'-'+file_count+'.consensusXML '
+    command += "-log " + out_port+'/logfile-'+file_count+'.txt'
 
     print("COMMAND: " + command + "\n")
     return command
@@ -55,4 +56,4 @@ if __name__ == '__main__':
 
     metaboliteadductdecharger(in_port, ini_file, out_port)
 
-    wrkflw.postvalidation(modulename="metabolite-adduct-decharger", outpath=out_port,)
+    # wrkflw.postvalidation(modulename="metabolite-adduct-decharger", outpath=out_port)

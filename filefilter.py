@@ -38,4 +38,4 @@ if __name__ == '__main__':
 
     filefilter(sys.argv[4], sys.argv[5])
 
-    wrkflw.postvalidation(modulename="file-filter", outpath=out_port, logtype="single")
+    # wrkflw.postvalidation(modulename="file-filter", outpath=out_port, logtype="single")

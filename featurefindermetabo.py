@@ -13,7 +13,8 @@ def get_exec_cmd(input_file, file_count, ini_file, out_port):
     command = 'FeatureFinderMetabo '
     if ini_file is not None:
         command += '-ini ' + ini_file + ' '
-    command += '-in ' + input_file + ' -out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
+    # command += '-in ' + input_file + ' -out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
+    command += '-in ' + input_file + ' -out ' + output + ' -log ' + out_port+'/logfile-'+file_count+'.txt'
 
     print("COMMAND: " + command + '\n')
     return command
@@ -27,6 +28,7 @@ def featurefindermetabo(input_port, ini_file, out_port):
     for input_file,file_count in wrkflw.parsefolder(input_port):
         cmd = get_exec_cmd(input_file,file_count,ini_file,out_port)
         commands.append(cmd)
+    # commands.append("FeatureFinderMetabo")
 
     mpl.run_parallel_shellcommands(commands,8)
 
@@ -34,9 +36,9 @@ def featurefindermetabo(input_port, ini_file, out_port):
 if __name__ == '__main__':
     print("===FEATURE FINDER METABO===")
 
-    print(sys.argv[1])
-    print(sys.argv[2])
-    print(sys.argv[3])
+    # print(sys.argv[1])
+    # print(sys.argv[2])
+    # print(sys.argv[3])
 
     # set env
     os.environ["LD_LIBRARY_PATH"] = sys.argv[1]
@@ -57,4 +59,4 @@ if __name__ == '__main__':
     # execute module
     featurefindermetabo(in_port, ini_file, out_port)
 
-    wrkflw.postvalidation(modulename="feature-finder-metabo", out_port)
+    # wrkflw.postvalidation(modulename="feature-finder-metabo", outpath=out_port)

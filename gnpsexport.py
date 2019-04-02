@@ -67,4 +67,4 @@ if __name__ == '__main__':
 
     gnpsexport(in_port, inputFiles_port, ini_file, out_port)
 
-    wrkflw.postvalidation(modulename="gnps-export", outpath=out_port)
+    # wrkflw.postvalidation(modulename="gnps-export", outpath=out_port)

@@ -4,18 +4,6 @@ import sys
 import xmltodict as xtd
 import openms_workflow as wrkflw
 
-def parse_folder(dir):
-    for file in sorted(os.listdir(dir)):
-        if "log" not in file and 'featureXML' in file:
-            yield (dir+"/"+file, os.path.splitext(file)[0].split('-')[1])
-
-
-def parse_out_folder(dir):
-    for file in os.listdir(dir):
-        if "log" not in file:
-            yield (dir+"/"+file, os.path.splitext(file)[0].split('-')[1])
-
-
 '''
 #5 module: feature linker unlabeled kd
 '''
@@ -26,7 +14,8 @@ def featurelinkerunlabeledkd(input_port, ini_file, out_port):
     command += "-in "
     for input_file,file_count in wrkflw.parsefolder(input_port,whitelist=["featureXML"]):
         command += input_file + " "
-    command += "-out " + out_port+"/"+out_port+"-0000.consensusXML" + ' > ' + out_port+'/logfile.txt'
+    command += "-out " + out_port+"/"+out_port+"-00000.consensusXML "
+    command += '-log ' + out_port+'/logfile-00000.txt'
     # command += " -out " + curr_port+"/tmp.consensusXML"
 
     print("COMMAND: " + command + "\n")
@@ -46,9 +35,9 @@ def featurelinkerunlabeledqt(input_port, ini_file, out_port):
         command += "-ini " + ini_file + " "
     command += "-in "
     for input_file,file_count in wrkflw.parsefolder(input_port, whitelist=["featureXML"]):
-            command += input_file + " "
-    command += "-out " + out_port+"/"+out_port+"-0000.consensusXML" + ' >> ' + out_port+'/logfile.txt'
-    # command += " -out " + curr_port+"/tmp.consensusXML"
+        command += input_file + " "
+    command += "-out " + out_port+"/"+out_port+"-00000.consensusXML "
+    command += '-log ' + out_port+'/logfile-00000.txt'
 
     print("COMMAND: " + command + "\n")
     os.system(command)
@@ -68,7 +57,7 @@ def fix_filenames(out_port, mapping_file):
                 print("mapping",raw_file_path,"->",map[1])
                 files[int(raw_file_path)] = map[1]
 
-    print(list(wrkflw.parsefolder(out_port)))
+    # print(list(wrkflw.parsefolder(out_port)))
     for input_file,file_count in wrkflw.parsefolder(out_port):
         with open(input_file) as f:
             file_dict = xtd.parse(f.read())
@@ -79,7 +68,7 @@ def fix_filenames(out_port, mapping_file):
 
         # export file_dict
         out = xtd.unparse(file_dict, pretty=True)
-        with open(out_port+"/featurelinkerunlabeled-0000.consensusXML", 'w') as file:
+        with open(input_file, 'w') as file:
             file.write(out)
 
     print("out port dir:", os.listdir(out_port))
@@ -119,6 +108,7 @@ if __name__ == '__main__':
     else:
         featurelinkerunlabeledkd(in_port, ini_file, out_port)
 
-    fix_filenames(out_port, sys.argv[7])
+    # wrkflw.postvalidation(modulename="feature-linker-unlabeled", outpath=out_port,\
+    # logtype="single", output_per_job=0)
 
-# feature-linker-unlabeled
+    fix_filenames(out_port, sys.argv[7])

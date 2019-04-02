@@ -3,33 +3,37 @@ import sys
 import shutil
 import xmltodict as xtd
 
-OUTPUT_DIR_INDEX = len(sys.argv) - 1
+OUTPUT_DIR_INDEX = -1
 
 if __name__ == '__main__':
     print("===PARSE OUTPUT===")
 
-    print('\ncurrent directory...')
-    curr_dir = os.listdir('.')
-    print(curr_dir)
-    for dir in curr_dir:
-        print(dir+":")
-        print(os.listdir(dir))
+    openms_output = ["iniFiles", "featurelinkerunlabeled", "filefilter", "textexporter", "gnpsexport"]
+    download_all_files = ["featurefindermetabo", "idmapper", "mapalignerposeclustering", "metaboliteadductdecharger"]
 
-    print('\nmoving directories into output dir...')
+    #debug what folders are left
+    # print os.listdir(os.path.abspath('.'))
+    print("current dir...")
+    for dir in os.listdir(os.path.abspath('.')):
+        if len(os.listdir(os.path.abspath(dir))) > 0:
+            print "\t"+dir, os.listdir(os.path.abspath(dir))
+
+    #parse output diretory
+    print sys.argv[OUTPUT_DIR_INDEX]
     output_dir = sys.argv[OUTPUT_DIR_INDEX]
 
-    # copy output files
-    for input_dir in sys.argv[1:OUTPUT_DIR_INDEX]:
-        print("move -- " + input_dir + " -> " + output_dir+"/"+input_dir)
-        shutil.copytree(input_dir, output_dir+"/"+input_dir)
+    #download openms output
+    # os.mkdir(output_dir+'/openms-output')
+    for dir in openms_output:
+        # os.mkdir('openms-output/'+dir)
+        shutil.copytree(os.path.abspath(dir), os.path.abspath(sys.argv[OUTPUT_DIR_INDEX]+"/openms_output/"+dir))
+        # shutil.copytree(os.path.abspath(dir), os.path.abspath(sys.argv[OUTPUT_DIR_INDEX]+dir))
 
-    # copy iniFiles
-    shutil.copytree("iniFiles", output_dir+"/iniFiles")
 
-    # copy log files to log folder
-    os.mkdir('logs')
-    for input_dir in sys.argv[1:OUTPUT_DIR_INDEX]:
-        for filepath in os.listdir(input_dir):
-            input_file = input_dir+'/'+filepath
-            if 'log' in filepath:
-                shutil.copyfile(input_file, output_dir+"/"+input_file)
+    # os.system("echo 'hello' > " + str(sys.argv[OUTPUT_DIR_INDEX]) + "/log.txt")
+    print("\n\n\n"+sys.argv[OUTPUT_DIR_INDEX], os.listdir(sys.argv[OUTPUT_DIR_INDEX]))
+
+    #download all files
+    # os.mkdir(output_dir+'/download-all-files')
+    for dir in download_all_files:
+        shutil.copytree(os.path.abspath(dir), os.path.abspath(sys.argv[OUTPUT_DIR_INDEX]+'/workflow_files/'+dir))

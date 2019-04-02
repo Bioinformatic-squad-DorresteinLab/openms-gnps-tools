@@ -25,9 +25,8 @@ def fileconverter(input_port, out_port):
         if '.mzml' not in input_file.lower():
             cmd = get_exec_cmd(input_file,file_count,out_port)
             commands.append(cmd)
-        else:
+        else:            
             shutil.copyfile(input_file, out_port+"/"+out_port+"-"+file_count+".mzML")
-
     mpl.run_parallel_shellcommands(commands,8)
 
 

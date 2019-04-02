@@ -19,9 +19,8 @@ def get_exec_cmd(input_file, file_count, ini_file, idxml_path, input_port, out_p
         command += '-ini ' + ini_file + ' '
     command += '-in ' + input_file + ' -id ' + idxml_path + ' '
     command += '-spectra:in ' + input_port+'/'+input_port+'-'+file_count+".mzML "
-
-    output = out_port+'/'+out_port+'-'+file_count+'.featureXML'
-    command += '-out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
+    command += '-out ' + out_port+'/'+out_port+'-'+file_count+'.featureXML '
+    command += '-log ' + out_port+'/logfile-'+file_count+'.txt'
 
     print("COMMAND: " + command + '\n')
     return command
@@ -64,4 +63,4 @@ if __name__ == '__main__':
 
     idmapper(mzml_port, ini_file, sys.argv[6], featurefinder_port, out_port)
 
-    wrkflw.postvalidation(modulename="id-mapper", out_port)
+    # wrkflw.postvalidation(modulename="id-mapper", outpath=out_port)
