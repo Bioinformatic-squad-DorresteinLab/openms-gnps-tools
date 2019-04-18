@@ -37,7 +37,8 @@ def gnpsexport(input_port, inputFiles_port, ini_file, out_port):
 
         for input_file,file_count in sorted(list(parse_folder(inputFiles_port))):
             command += input_file + " "
-        command += "-out " + output + ' >> ' + out_port+'/logfile.txt'
+        command += "-out " + output + ' '
+        command += '-log ' + out_port+'/logfile.txt'
 
         print("COMMAND: " + command + "\n")
         os.system(command)

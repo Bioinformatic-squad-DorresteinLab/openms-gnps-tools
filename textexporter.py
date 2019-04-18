@@ -16,8 +16,8 @@ def parse_folder(dir):
 def textexporter(input_port, ini_file, out_port):
     assert len(list(parse_folder(input_port))) > 0
     for input_file,file_count in list(parse_folder(input_port)):
-        command = "TextExporter -ini " + ini_file + " -in " + input_file + " -out " + out_port+'/'+out_port+'-'+file_count+'.csv' + ' >> ' + out_port+'/logfile.txt'
-        # command = command_dir+"TextExporter -ini " + ini_file + " -in " + file + " -out " + curr_port+'/out.csv'
+        # command = "TextExporter -ini " + ini_file + " -in " + input_file + " -out " + out_port+'/'+out_port+'-'+file_count+'.csv' + ' >> ' + out_port+'/logfile.txt'
+        command = "TextExporter -ini " + ini_file + " -in " + input_file + " -out " + out_port+'/'+out_port+'-'+file_count+'.csv' + ' -log ' + out_port+'/logfile.txt'
 
         print("COMMAND: " + command + "\n")
         os.system(command)

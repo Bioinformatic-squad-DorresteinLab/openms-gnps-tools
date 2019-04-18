@@ -15,7 +15,8 @@ def filefilter(input_port, out_port):
         output = out_port+'/'+out_port+"-"+file_count+".consensusXML"
 
         command = "FileFilter -id:remove_unannotated_features -in " + input_file + " "
-        command += "-out " + output + ' >> ' + out_port+'/logfile.txt'
+        command += "-out " + output + ' '
+        command += '-log ' + out_port+'/logfile.txt'
 
         print("COMMAND: " + command + "\n")
         os.system(command)
