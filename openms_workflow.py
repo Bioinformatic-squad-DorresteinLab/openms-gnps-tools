@@ -48,7 +48,7 @@ def postvalidation(modulename, outpath, logtype="multiple", output_per_job=1):
               num_output += 1
     except ValueError:
       if num_log is 0:
-        assert False, modulename.upper()+": Issue with executing module"
+        print(modulename.upper()+": Issue with executing module")
         # print .logs file is possible
         for file in os.listdir('.logs'):
             if modulename in file and os.path.splitext(file)[1] is "log":
