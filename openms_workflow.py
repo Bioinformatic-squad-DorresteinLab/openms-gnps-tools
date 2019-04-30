@@ -21,7 +21,7 @@ def parsefolder(path, blacklist=["log"], whitelist=None):
 
 def postvalidation(modulename, outpath, logtype="multiple", output_per_job=1):
     print("\n\n\n===POST VALIDATION===")
-    print(os.listdir(outpath))
+
     assert logtype in ("single", "multiple")
     assert type(output_per_job) is int
 
@@ -30,6 +30,7 @@ def postvalidation(modulename, outpath, logtype="multiple", output_per_job=1):
 
     try:
       output_dir = list(parsefolder(outpath))
+      print(output_dir)
       num_log = 0
       num_output = 0
       
