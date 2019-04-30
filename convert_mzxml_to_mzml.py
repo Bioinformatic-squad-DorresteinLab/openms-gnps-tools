@@ -23,6 +23,10 @@ def fileconverter(input_port, out_port):
     commands = []
     for input_file,file_count in list(wrkflw.parsefolder(input_port)):
         if '.mzml' not in input_file.lower():
+            assert any([ext in input_file.lower for ext in ['mzData', 'mzXML', 
+                     'mzML', 'cachedMzML', 'dta', 'dta2d', 'mgf', 'featureXML',
+                     'consensusXML', 'ms2', 'fid', 'tsv', 'peplist', 'kroenik'
+                     , 'edta']]), "ERROR: Found invalid file type " + input_file.lower()
             cmd = get_exec_cmd(input_file,file_count,out_port)
             commands.append(cmd)
         else:            
