@@ -21,16 +21,17 @@ def get_exec_cmd(input_file, file_count, out_port):
 '''
 def fileconverter(input_port, out_port):
     commands = []
-    for input_file,file_count in list(wrkflw.parsefolder(input_port)):
-        if '.mzml' not in input_file.lower():
-            assert any([ext in input_file.lower for ext in ['mzData', 'mzXML', 
-                     'mzML', 'cachedMzML', 'dta', 'dta2d', 'mgf', 'featureXML',
-                     'consensusXML', 'ms2', 'fid', 'tsv', 'peplist', 'kroenik'
-                     , 'edta']]), "ERROR: Found invalid file type " + input_file.lower()
-            cmd = get_exec_cmd(input_file,file_count,out_port)
-            commands.append(cmd)
-        else:            
-            shutil.copyfile(input_file, out_port+"/"+out_port+"-"+file_count+".mzML")
+    for input_file,file_count in list(wrkflw.parsefolder(input_port)):        
+        if any([ext.lower() in input_file.lower() for ext in ['mzData', 'mzXML',\
+                'cachedMzML', 'dta', 'dta2d', 'mgf', 'featureXML',\
+                'consensusXML', 'ms2', 'fid', 'tsv', 'peplist', 'kroenik',\
+                'edta']]):
+          cmd = get_exec_cmd(input_file,file_count,out_port)
+          commands.append(cmd)
+        elif "mzml" in input_file.lower():
+          shutil.copyfile(input_file, out_port+"/"+out_port+"-"+file_count+".mzML")
+        else:
+          continue
     mpl.run_parallel_shellcommands(commands,8)
 
 
