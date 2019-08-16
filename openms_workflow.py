@@ -16,6 +16,7 @@ def parsefolder(path, blacklist=["log"], whitelist=None):
         all(bl not in file for bl in blacklist) and \
         (whitelist is None or any(wl in file for wl in whitelist)):
             # returns (path, count)
+            print((path+"/"+file, os.path.splitext(file)[0].split('-')[1]))
             yield (path+"/"+file, os.path.splitext(file)[0].split('-')[1])
 
 
@@ -41,14 +42,27 @@ def postvalidation(modulename, outpath, logtype="multiple", output_per_job=1):
       exp_log = 1 if logtype is "single" else num_jobs
       exp_output = output_per_job * num_jobs if output_per_job > 0 else 1
 
-      for path,_ in parsefolder(outpath, blacklist=[]):
+      for path,_ in os.listdir(outpath):
           # log file
-          if "log" in path:
+          if "logfile" in path:
               num_log += 1
-              log_file = path
+              log_file = outpath+"/"+path
           # output file
           else:
               num_output += 1
+
+      if num_log is 0:
+        print(modulename.upper()+": Issue with executing module")
+        # print .logs file is possible
+        for file in os.listdir('.logs'):
+            if modulename in file and os.path.splitext(file)[1] is "log":
+                with open(".logs/"+file) as f:
+                    print(f.read())
+                    break
+      elif num_output is 0 or num_log is not exp_log or num_output is not exp_output:
+          with open(log_file) as f:
+              print(f.read())
+
     except ValueError:
       if num_log is 0:
         print(modulename.upper()+": Issue with executing module")
