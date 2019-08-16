@@ -59,4 +59,4 @@ if __name__ == '__main__':
     # execute module
     featurefindermetabo(in_port, ini_file, out_port)
 
-    # wrkflw.postvalidation(modulename="feature-finder-metabo", outpath=out_port)
+    wrkflw.postvalidation(modulename="feature-finder-metabo", outpath=out_port)

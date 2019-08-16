@@ -47,4 +47,4 @@ if __name__ == '__main__':
 
     mapalignerposeclustering(in_port, ini_file, out_port)
 
-    # wrkflw.postvalidation(modulename="map-aligner-pose-clustering", outpath=out_port)
+    wrkflw.postvalidation(modulename="map-aligner-pose-clustering", outpath=out_port)

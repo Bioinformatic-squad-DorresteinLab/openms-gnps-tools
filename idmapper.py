@@ -65,4 +65,4 @@ if __name__ == '__main__':
 
     idmapper(mzml_port, ini_file, sys.argv[6], featurefinder_port, out_port)
 
-    # wrkflw.postvalidation(modulename="id-mapper", outpath=out_port)
+    wrkflw.postvalidation(modulename="id-mapper", outpath=out_port)

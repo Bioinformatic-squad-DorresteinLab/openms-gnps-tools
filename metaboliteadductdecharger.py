@@ -58,4 +58,4 @@ if __name__ == '__main__':
 
     metaboliteadductdecharger(in_port, ini_file, out_port)
 
-    # wrkflw.postvalidation(modulename="metabolite-adduct-decharger", outpath=out_port)
+    wrkflw.postvalidation(modulename="metabolite-adduct-decharger", outpath=out_port)
