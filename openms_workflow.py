@@ -43,7 +43,9 @@ def postvalidation(modulename, outpath, logtype="multiple", output_per_job=1):
       exp_output = output_per_job * num_jobs if output_per_job > 0 else 1
 
       #LOG:
-      print(os.listdir(outpath))
+      num_log = 0
+      num_output = 0
+      # print(os.listdir(outpath))
       for path,_ in os.listdir(outpath):
           # log file
           if "logfile" in path:
