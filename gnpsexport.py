@@ -41,7 +41,7 @@ def gnpsexport(input_port, inputFiles_port, ini_file, out_port):
         command += '> ' + out_port+'/logfile.txt'
         # command += '-log ' + out_port+'/logfile.txt'
 
-        print("COMMAND: " + command + "\n")
+        #print("COMMAND: " + command + "\n")
         os.system(command)
 
 

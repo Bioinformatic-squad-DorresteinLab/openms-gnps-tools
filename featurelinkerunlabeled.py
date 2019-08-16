@@ -18,7 +18,7 @@ def featurelinkerunlabeledkd(input_port, ini_file, out_port):
     command += '> ' + out_port+'/logfile-00000.txt'
     # command += '-log ' + out_port+'/logfile-00000.txt'
 
-    print("COMMAND: " + command + "\n")
+    #print("COMMAND: " + command + "\n")
     os.system(command)
 
     # delete featureXML file
@@ -39,7 +39,7 @@ def featurelinkerunlabeledqt(input_port, ini_file, out_port):
     command += "-out " + out_port+"/"+out_port+"-00000.consensusXML "
     command += '-log ' + out_port+'/logfile-00000.txt'
 
-    print("COMMAND: " + command + "\n")
+    #print("COMMAND: " + command + "\n")
     os.system(command)
 
 

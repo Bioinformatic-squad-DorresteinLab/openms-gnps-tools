@@ -24,7 +24,7 @@ def get_exec_cmd(input_file, file_count, ini_file, idxml_path, input_port, out_p
     # command += '-log ' + out_port+'/logfile-'+file_count+'.txt'
 
 
-    print("COMMAND: " + command + '\n')
+    # print("COMMAND: " + command + '\n')
     return command
 
 

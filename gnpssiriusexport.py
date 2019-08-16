@@ -19,7 +19,7 @@ def gnpssiriusexport(featurelinker_file, inputFiles_port, ini_file, output_type,
         command += inputFiles_port+'/'+file + " "
     command += "-out " + output + " -output_type " + output_type + ' >> ' + out_port+'/logfile.txt'
 
-    print("COMMAND: " + command + "\n")
+    #print("COMMAND: " + command + "\n")
     os.system(command)
 
 

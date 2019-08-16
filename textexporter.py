@@ -19,7 +19,7 @@ def textexporter(input_port, ini_file, out_port):
         # command = "TextExporter -ini " + ini_file + " -in " + input_file + " -out " + out_port+'/'+out_port+'-'+file_count+'.csv' + ' >> ' + out_port+'/logfile.txt'
         command = "TextExporter -ini " + ini_file + " -in " + input_file + " -out " + out_port+'/'+out_port+'-'+file_count+'.csv' + ' -log ' + out_port+'/logfile.txt'
 
-        print("COMMAND: " + command + "\n")
+        #print("COMMAND: " + command + "\n")
         os.system(command)
 
     # with open(out_port+'/textexporter.csv', "rt") as fin:
