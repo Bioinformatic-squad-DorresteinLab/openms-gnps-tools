@@ -55,7 +55,7 @@ def postvalidation(modulename, outpath, logtype="multiple", output_per_job=1):
           else:
               num_output += 1
 
-      if num_log is 0:
+      if num_output is 0:
         print(modulename.upper()+": Issue with executing module")
         # print .logs file is possible
         for file in os.listdir('.logs'):
@@ -63,7 +63,7 @@ def postvalidation(modulename, outpath, logtype="multiple", output_per_job=1):
                 with open(".logs/"+file) as f:
                     print(f.read())
                     break
-      elif num_output is 0 or num_log is not exp_log or num_output is not exp_output:
+      elif num_output is not exp_output:
           with open(log_file) as f:
               print(f.read())
 
