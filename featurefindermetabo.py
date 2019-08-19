@@ -13,8 +13,8 @@ def get_exec_cmd(input_file, file_count, ini_file, out_port):
     command = 'FeatureFinderMetabo '
     if ini_file is not None:
         command += '-ini ' + ini_file + ' '
-    command += '-in ' + input_file + ' -out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
-    # command += '-in ' + input_file + ' -out ' + output + ' -log ' + out_port+'/logfile-'+file_count+'.txt'
+    # command += '-in ' + input_file + ' -out ' + output + ' > ' + out_port+'/logfile-'+file_count+'.txt'
+    command += '-in ' + input_file + ' -out ' + output + ' -log ' + out_port+'/logfile-'+file_count+'.txt'
 
     return command
 
